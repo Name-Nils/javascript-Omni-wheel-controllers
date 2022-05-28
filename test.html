@@ -1,8 +1,17 @@
 <html>
     <script>
-        document.addEventListener('keydown', function(event) {
-    console.log(`${event.key} pressed`);
-});
+        let data = "hello this is the data";
+        const textToBLOB = new Blob([data], { type: 'text/plain' });
+        const sFileName = 'fdsaf.txt';	   // The file to save the data.
+        let newLink = document.createElement("a");
+        newLink.download = sFileName;
+
+        if (window.webkitURL != null) {
+            newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+        }
+
+        newLink.click(); 
+
     </script>
     <body>
         

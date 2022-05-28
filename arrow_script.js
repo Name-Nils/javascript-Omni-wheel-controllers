@@ -1,3 +1,4 @@
+
 connected = false;
 let socket_queue = [];
 let allow_forward = true;
@@ -87,7 +88,36 @@ ws.addEventListener("close", () => {
     refresh();
 })
 
+class points
+{
+    constructor(angle, distance, accuracy)
+    {
+        this.angle = angle;
+        
+        this.distance = distance;
+        this.accuracy = accuracy;
 
+        this.x = 0;
+        this.y = 0;
+    }
+    
+    calc_xy = function()
+    {
+        this.x = Math.cos((Math.PI / 180) * this.angle) * this.distance;
+        this.y = Math.sin((Math.PI / 180) * this.angle) * this.distance;
+    }
+
+    get_data = function()
+    {
+        return String(
+            "X" + String(this.x) +
+            " Y" + String(this.y) + 
+            " P" + String(this.accuracy)
+        );
+    }
+}
+
+let lidar = [];
 let last_data = [];
 visualize_lidar = function (string) { // 32 cm diameter robot
     string_ = string.substring(6, string.length - 1); // remove the beginning id and the ending }, not necessary anymore since the splitting method removes these parts now anyway
@@ -122,6 +152,14 @@ visualize_lidar = function (string) { // 32 cm diameter robot
         let dist = data[i + 1].split(",")[0] / 10;
 
         let diff = Math.abs(last_data[i] - dist);
+
+        const min_sure = 30;
+        let current = 0;
+        if (diff <= min_sure)
+        {
+            current = 1- (diff / min_sure);
+        }
+        lidar[i] = new points(i, dist * 10, current);
         // fixing the data, removing the noise
 
         canvas.fillStyle = "rgba(0, 0, 0, 0)";
@@ -217,3 +255,26 @@ refresh = function () {
     }
 }
 //setInterval(refresh, 4000);
+
+function save_lidar()
+{
+    //if (!connected) alert("Not Connected to Robot"); return;
+    let d = new Date();
+    let data = "Lidar data points\nTime recoreded: " + String(d.getTime());
+    for (let i = 0; i < 360; i++)
+    {
+        lidar[i].calc_xy();
+        data += "\n" + lidar[i].get_data();
+    }
+
+    const textToBLOB = new Blob([data], { type: 'text/plain' });
+    let sFileName = "Lidar Data " + String(d.getTime()) + ".txt";
+    let newLink = document.createElement("a");
+    newLink.download = sFileName;
+
+    if (window.webkitURL != null) {
+        newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+    }
+
+    newLink.click(); 
+}
