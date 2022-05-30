@@ -1,6 +1,7 @@
 import math
 import tkinter
 from tkinter import Button, Canvas, filedialog as fd
+from numpy import angle, diff, short
 from pyparsing import col
 
 
@@ -28,7 +29,7 @@ class Set:
                 Point(float(point[0][1:]), float(point[1][1:]),
                       float(point[2][1:])))
 
-    def translate(self, x, y, r):
+    def translate(self, x, y, r=0):
         for point in self.points:
             new_x = (point.x * math.cos(r)) - (point.y * math.sin(r))
             new_y = (point.x * math.sin(r)) + (point.y * math.cos(r))
@@ -64,60 +65,48 @@ def dist(a, b):
     return math.sqrt(math.pow(a.x - b.x, 2) + math.pow(a.y - b.y, 2))
 
 def translate_together(set_a, set_b):
-    amount_correct = 100
+    amount_correct = 70
     # Rotate the coordinates to the same rotation
 
     angle_ans = 0
-    x_ans = None
-    y_ans = None
+    shortest = None
     for r in range(360):
-        radians = (math.pi / 180) * r
         single_move = math.pi / 180
 
         set_b.translate(0,0,single_move)
 
         # check for the surrounding coordinate and how close it is
-        y_closest = []
-        x_closest = []
-        for a_points in set_a.points:
-            if a_points.show == False: continue
-            x_current = None
-            y_current = None
-            for b_points in set_b.points:
-                if b_points.show == False: continue
-                if x_current == None: 
-                    x_current = b_points.x
-                    y_current = b_points.y
-                if dist(a_points, b_points) < dist(a_points, Point(x_current, y_current)):
-                    x_current = b_points.x
-                    y_current = b_points.y
-            x_closest.append(x_current)
-            y_closest.append(y_current)
-        
-        
-        # order these closest points by size
-        x_closest.sort()
-        y_closest.sort()
+        angle_anw = 0
+        shortest_all = []
+        for p_a in set_a.points:
+            if p_a.show == False: continue
+            shortest = None
+            for p_b in set_b.points:
+                if p_b.show == False: continue
+                if shortest == None: shortest = dist(p_b, p_a)
+                d = dist(p_a, p_b)
+                if shortest > d:
+                    shortest = d
+            shortest_all.append(shortest)
 
-        size = len(x_closest) / 2
-        range_x = x_closest[round(size - (amount_correct / 2))] - x_closest[round(size + (amount_correct / 2))]        
-        range_y = y_closest[round(size - (amount_correct / 2))] - y_closest[round(size + (amount_correct / 2))]
-
-        if x_ans == None:
-            x_ans = range_x
-            y_ans = range_y
-            angle_ans = r
-
-        if math.fabs(range_x) + math.fabs(range_y) < math.fabs(x_ans) + math.fabs(y_ans):
-            x_ans = range_x
-            y_ans = range_y
+        # now i have a list of all the shortest distances from point at this angle
+        shortest_all.sort()
+        size = len(shortest_all)
+        total = 0
+        for i in range(len(shortest_all)):
+            if (i < (size / 2) - (amount_correct / 2)): continue
+            if (i > (size / 2) + (amount_correct / 2)): break
+            total += shortest_all[i]
+        total = total / size
+        if (shortest == None or shortest < total):
+            shortest = total
             angle_ans = r
 
         print(str(r) + "  " + str(angle_ans))
+        # dont want shortest distance, looking for the most similar defect
+
     return angle_ans
-
-
-
+    
 root = tkinter.Tk()
 canvas_size = 500
 
@@ -168,16 +157,17 @@ def show_set(set, zoom=1):
             outline="black")
 
 seta = Set("D:\Shared Folder\Downloads\Lidar Data 1653770284580.txt")
-setb = Set("D:\Shared Folder\Downloads\Lidar Data 1653770284580.txt")
-#setb = Set("D:\Shared Folder\Downloads\Lidar Data 1653770210021.txt")
+#setb = Set("D:\Shared Folder\Downloads\Lidar Data 1653770284580.txt")
+setb = Set("D:\Shared Folder\Downloads\Lidar Data 1653770210021.txt")
+setb.translate(250,-80,0)
 
 seta.remove_noise()
 setb.remove_noise()
 
 seta.translate(0,0,0)
-setb.translate(0,0, (math.pi / 180) * translate_together(seta, setb)) # how to figure out these translation values without manual intervention?
+#setb.translate(0,0, (math.pi / 180) * translate_together(seta, setb)) # how to figure out these translation values without manual intervention?
 show_set(seta, 0.1)
-show_set(setb, 0.1)
+#show_set(setb, 0.1)
 
 
 

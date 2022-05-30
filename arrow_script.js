@@ -120,8 +120,8 @@ class points
 let lidar = [];
 let last_data = [];
 visualize_lidar = function (string) { // 32 cm diameter robot
-    string_ = string.substring(6, string.length - 1); // remove the beginning id and the ending }, not necessary anymore since the splitting method removes these parts now anyway
-    let data = string_.split(": ");
+    string_ = string.substring(6, string.length); // remove the beginning id and the ending }, not necessary anymore since the splitting method removes these parts now anyway
+    let data = string_.split(", ");
 
 
     let c = document.getElementById("lidar");
@@ -149,7 +149,7 @@ visualize_lidar = function (string) { // 32 cm diameter robot
     allow_backward = true;
     allow_forward = true;
     for (let i = 0; i < 360; i++) {
-        let dist = data[i + 1].split(",")[0] / 10;
+        let dist = data[i] / 10;
 
         let diff = Math.abs(last_data[i] - dist);
 
@@ -247,7 +247,7 @@ get_image = function () {
         alert("Command overflow\nQueue size: " + String(socket_queue.length));
     }
 }
-setInterval(get_image, 150);
+setInterval(get_image, 50);
 
 refresh = function () {
     if (!connected) {
