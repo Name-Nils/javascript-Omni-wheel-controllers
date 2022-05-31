@@ -4,6 +4,7 @@ let allow_forward = true;
 let allow_backward = true;
 let safe_dist = 40;
 let checking_angle = 50;
+let steering_mode = false;
 
 class key {
     constructor(key, func) {
@@ -232,7 +233,14 @@ send_camera = function (a) {
     last_cam_angle = a;
 }
 
+let check = document.getElementById("steering_mode");
+check.addEventListener("click", function(){
+    steering_mode = !steering_mode;
+    console.log(steering_mode);
+})
+
 get_image = function () {
+    
     if (!connected) return;
     console.log(socket_queue.length);
     if (socket_queue.length == 0) {
