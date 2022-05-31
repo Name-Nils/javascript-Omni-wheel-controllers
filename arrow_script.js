@@ -1,4 +1,3 @@
-
 connected = false;
 let socket_queue = [];
 let allow_forward = true;
@@ -215,7 +214,7 @@ let last_movement_string = "";
 send_movement = function (A, S, R) {
     //console.log("A" + String(A) + " S" + String(S) + " R" + String(R));
     if (connected) {
-        send = "A" + String(A - (Math.PI / 2)) + " S" + String(S) + " R" + String(R);
+        send = "move A" + String(A - (Math.PI / 2)) + " S" + String(S) + " R" + String(R);
         if (last_movement_string == send) return;
         //console.log(send);
         socket_queue.push(String(send));
