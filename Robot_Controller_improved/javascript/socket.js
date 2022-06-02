@@ -6,8 +6,8 @@ let receive_event = document.createElement("box");
 receive_event.textContent = "";
 
 let send_queue = []
-const send_per_time = 1;
-const time_between_sends = 100; // milliseconds
+const send_per_time = 2;
+const time_between_sends = 300; // milliseconds
 
 const Socket = {
     CLOSED: 0,

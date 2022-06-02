@@ -17,6 +17,7 @@ receive_event.addEventListener("click", function()
     {
         let base_64 = command(" ", "", data);
 
+        console.log(settings.CAMERA);
         show_live_camera(settings.CAMERA, base_64);
     }
     else if (check("lidar", data))

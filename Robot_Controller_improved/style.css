@@ -1,15 +1,15 @@
 .camera_stream{
-    width: 100%;
-    position: absolute;
+    width: 800px;
+    position: relative;
+    float:right
 }
 
 .visualize_lidar{
-    width: 40%;
-    position: absolute;
+    height: 300px;
+    position: relative;
 }
 .driving_view{
     position: absolute;
-    z-index: 1;
 }
 
 
