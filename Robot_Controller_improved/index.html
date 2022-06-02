@@ -4,11 +4,48 @@
     <head>
         <title>Robot Controller</title>
 
-        <style scr="style.css"></style>
+        <link rel="stylesheet" href="style.css">
 
-        <script src="main.js"></script>
     </head>
-
+    
     <body>
+        <!-- settings dropdown menu here -->
+            <div class="dropdown">
+                <button class="dropbtn">Settings
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <input type="checkbox" id="setting_camera", checked="true">
+                    <label for="setting_camera">Camera Stream</label>
+                    <br>
+                    <input type="checkbox" id="setting_lidar", checked="true">
+                    <label for="setting_lidar">Lidar</label>
+                    <br>
+                    <input type="checkbox" id="setting_movement">
+                    <label for="setting_movement">Movement</label>
+                </div>
+            </div>
+    
+    <div class="driving_view">
+        <img id="camera_stream", class="camera_stream">
+        <canvas id="visualize_lidar", style="width: 500px; height: 500px;", class="visualize_lidar"></canvas>
+    </div>
+        <!-- would like to include files in other way more similar to python or c++ where there is another identifier for the variables and things dont have the same names -->
+        <!-- i will implement namespaces instead and so it will be similar to python -->
+
+        <!-- <script src="./jquery-3.6.0.min.js"></script>  //might add in again if i need jquery// --> 
+        <script>
+            function loadScript(url)
+            {    
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = url;
+                head.appendChild(script);
+            }
+        </script>
+
+        <script src="./javascript/socket.js"></script>
+        <script src="./javascript/input_handler.js"></script>
     </body>
 </html>
