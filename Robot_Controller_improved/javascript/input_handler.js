@@ -17,7 +17,6 @@ receive_event.addEventListener("click", function()
     {
         let base_64 = command(" ", "", data);
 
-        console.log(settings.CAMERA);
         show_live_camera(settings.CAMERA, base_64);
     }
     else if (check("lidar", data))
@@ -26,5 +25,10 @@ receive_event.addEventListener("click", function()
         let data_set = new Set(lidar_data);
 
         visualize_lidar_radar(settings.LIDAR, 0.05, data_set, true); // zoom is inversed, 0.1 is multiplied by the coordinates instead of divided by.
+    }
+    else if (check("log", data))
+    {
+        let log = command("log", " ", String(data));
+        console.log(log);
     }
 })

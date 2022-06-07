@@ -7,7 +7,7 @@ receive_event.textContent = "";
 
 let send_queue = []
 const send_per_time = 2;
-const time_between_sends = 300; // milliseconds
+const time_between_sends = 200; // milliseconds
 
 const Socket = {
     CLOSED: 0,

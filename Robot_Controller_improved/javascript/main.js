@@ -10,7 +10,6 @@ let camera_element = document.getElementById("setting_camera");
 camera_element.addEventListener("click", function()
 {
     settings.CAMERA = camera_element.checked;
-    console.log(settings.CAMERA);
 })
 
 
